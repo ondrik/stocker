@@ -1,0 +1,9 @@
+{% if stock_list %}
+    <ul>
+    {% for stock in stock_list %}
+        <li><a href="/stockerapp/stockinfo/{{ stock.ticker }}/">{{ stock.ticker }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No stocks are available.</p>
+{% endif %}
