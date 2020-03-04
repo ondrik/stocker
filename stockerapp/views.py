@@ -3,13 +3,12 @@ from django.shortcuts import render
 
 import iexfinance.stocks as iexstocks
 import pandas as pd
-import bokeh.plotting as bkplt
-import bokeh.embed as bkem
 
 from datetime import datetime, date, timedelta
 
 
 from .models import Stock
+from .plotting import plot_candlestick
 
 # index
 def index(request):
@@ -35,27 +34,26 @@ def stockinfo(request, ticker):
     start = end - timedelta(days=60)
     df = iexstocks.get_historical_data(stock.ticker, start, end, output_format='pandas',
                                      token=IEX_TOKEN)
-    df["date"] = df.index
+    df["time"] = df.index
 
-    plot = bkplt.figure(
-            x_axis_type='datetime',
-            plot_width=1200,
-            plot_height=400)
+    # plot = bkplt.figure(
+    #         x_axis_type='datetime',
+    #         plot_width=1200,
+    #         plot_height=400)
+    #
+    # # x = [1,2,3,4,5]
+    # # y = [1,2,3,4,5]
+    # # plot.line(x, y, line_width=2)
+    # # plot.line(df.index, df['close'], line_width=2)
+    # inc = df.close > df.open
+    # dec = df.open > df.close
+    # w = 12*60*60*1000 # half day in ms
+    #
+    # plot.segment(df.date, df.high, df.date, df.low, color="black")
+    # plot.vbar(df.date[inc], w, df.open[inc], df.close[inc], fill_color="#D5E1DD", line_color="black")
+    # plot.vbar(df.date[dec], w, df.open[dec], df.close[dec], fill_color="#F2583E", line_color="black")
 
-    # x = [1,2,3,4,5]
-    # y = [1,2,3,4,5]
-    # plot.line(x, y, line_width=2)
-    # plot.line(df.index, df['close'], line_width=2)
-    inc = df.close > df.open
-    dec = df.open > df.close
-    w = 12*60*60*1000 # half day in ms
-
-    plot.segment(df.date, df.high, df.date, df.low, color="black")
-    plot.vbar(df.date[inc], w, df.open[inc], df.close[inc], fill_color="#D5E1DD", line_color="black")
-    plot.vbar(df.date[dec], w, df.open[dec], df.close[dec], fill_color="#F2583E", line_color="black")
-
-
-    plot_script, plot_img = bkem.components(plot)
+    plot_script, plot_img = plot_candlestick(df, 1200, 400)
 
     debug_str = ""
     debug_str += str(iex_stock) + "\n"

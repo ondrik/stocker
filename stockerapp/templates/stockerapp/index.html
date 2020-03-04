@@ -1,9 +1,16 @@
 {% if stock_list %}
-    <ul>
+  <table>
+    <tr>
+      <th>Ticker</th>
+      <th></th>
+    </tr>
     {% for stock in stock_list %}
-        <li><a href="/stockerapp/stockinfo/{{ stock.ticker }}/">{{ stock.ticker }}</a></li>
+    <tr>
+      <td>{{ stock.ticker }}</td>
+      <td><a href="/stockerapp/stockinfo/{{ stock.ticker }}/">Info</a></td>
+    </tr>
     {% endfor %}
-    </ul>
+  </table>
 {% else %}
     <p>No stocks are available.</p>
 {% endif %}
