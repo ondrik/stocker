@@ -8,6 +8,7 @@
     <tr>
       <td>{{ stock.ticker }}</td>
       <td><a href="/stockerapp/stockinfo/{{ stock.ticker }}/">Info</a></td>
+      <td><a href="/stockerapp/stockdaily/{{ stock.ticker }}/">Intraday</a></td>
     </tr>
     {% endfor %}
   </table>

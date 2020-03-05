@@ -1,0 +1,27 @@
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="UTF-8">
+     <link href="http://cdn.pydata.org/bokeh/release/bokeh-1.4.0.min.css" rel="stylesheet" type="text/css">
+     <link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-1.4.0.min.css" rel="stylesheet" type="text/css">
+
+     <script src="http://cdn.pydata.org/bokeh/release/bokeh-1.4.0.min.js"></script>
+     <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-1.4.0.min.js"></script>
+       {{ plot_script | safe }}
+     <title>Stocker: {{ stock.ticker }}</title>
+   </head>
+
+   <body>
+     <h1>{{ stock.ticker }}: {{ company_name }} (INTRADAY) &mdash; {{ cur_price }}</h1>
+     <img src="{{ stock_img }}" />
+
+     {{ plot_img | safe }}
+
+     {{ df | safe }}
+
+     <h1>Debug</h1>
+     {{ debug_str }}
+   </body>
+
+ </html> 
+

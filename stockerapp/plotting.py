@@ -4,12 +4,17 @@ import bokeh.plotting as bkplt
 import bokeh.embed as bkem
 
 ###########################################
-def plot_candlestick(df, width, height):
-    """plot_candlestick(df) -> (plot_script, plot_img)
+def plot_candlestick(df, res, width, height):
+    """plot_candlestick(df, res, width, height) -> (plot_script, plot_img)
 
 Plots a Pandas's data frame with time data into a candlestick bar.
 The data frame is assumed to have (at least) the following columns:
 "time", "open", "close", "high", "low", "volume".
+The parameters:
+    df - the data frame with data
+    res - resolution of time data (smallest interval), in timedelta
+    width = width of the plot in pixels
+    height = height of the plot in pixels
 
 The function returns a pair consisting of a JavaScript script and an image.
 """
@@ -21,7 +26,8 @@ The function returns a pair consisting of a JavaScript script and an image.
     inc = df.close > df.open
     dec = df.open > df.close
     # TODO: needs to be changed
-    w = 12*60*60*1000 # half day in ms
+    # w = 12*60*60*1000 # half day in ms
+    w = res.total_seconds() * 1000 / 2
 
     # plot the candles
     plot.segment(df.time, df.high, df.time, df.low, color="black")
