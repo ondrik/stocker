@@ -1,12 +1,16 @@
 {% if stock_list %}
   <table>
     <tr>
+      <th>Logo</th>
       <th>Ticker</th>
+      <th>Name</th>
       <th></th>
     </tr>
     {% for stock in stock_list %}
     <tr>
+      <td><img src="{{ stock.logo_url }}" /></td>
       <td>{{ stock.ticker }}</td>
+      <td>{{ stock.company_name }}</td>
       <td><a href="/stockerapp/stockinfo/{{ stock.ticker }}/">Info</a></td>
       <td><a href="/stockerapp/stockdaily/{{ stock.ticker }}/">Intraday</a></td>
     </tr>
