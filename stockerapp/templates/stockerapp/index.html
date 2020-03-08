@@ -1,21 +1,47 @@
-{% if stock_list %}
-  <table>
-    <tr>
-      <th>Logo</th>
-      <th>Ticker</th>
-      <th>Name</th>
-      <th></th>
-    </tr>
-    {% for stock in stock_list %}
-    <tr>
-      <td><img src="{{ stock.logo_url }}" /></td>
-      <td>{{ stock.ticker }}</td>
-      <td>{{ stock.company_name }}</td>
-      <td><a href="/stockerapp/stockinfo/{{ stock.ticker }}/">Info</a></td>
-      <td><a href="/stockerapp/stockdaily/{{ stock.ticker }}/">Intraday</a></td>
-    </tr>
-    {% endfor %}
-  </table>
-{% else %}
-    <p>No stocks are available.</p>
-{% endif %}
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="UTF-8">
+     <title>Stocker</title>
+   </head>
+   <body>
+    <h1>Stocker</h1>
+    <h2>Stocks</h2>
+    {% if stock_list %}
+      <table>
+        <tr>
+          <th>Logo</th>
+          <th>Ticker</th>
+          <th>Name</th>
+          <th></th>
+        </tr>
+        {% for stock in stock_list %}
+        <tr>
+          <td><img src="{{ stock.logo_url }}" height="40" width="40"/></td>
+          <td>{{ stock.ticker }}</td>
+          <td>{{ stock.company_name }}</td>
+          <td><a href="{% url 'stockinfo' stock.ticker %}">Info</a></td>
+          <td><a href="{% url 'stockdaily' stock.ticker %}">Intraday</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+        <p>No stocks are available.</p>
+    {% endif %}
+    <h2>Portfolios</h2>
+    {% if portfolio_list %}
+      <table>
+        <tr>
+          <th>Name</th>
+        </tr>
+        {% for portfolio in portfolio_list %}
+        <tr>
+          <td><a href="{% url 'portfolio' portfolio.id %}">{{ portfolio.name }}</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+        <p>No portfolios are available.</p>
+    {% endif %}
+   </body>
+ </html> 
