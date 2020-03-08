@@ -44,8 +44,8 @@ class Order(models.Model):
 
     # conversion to string
     def __str__(self):
-        return stock.ticker + \
+        return self.stock.ticker + \
             ", amount: " + str(self.amount) + \
             ", unit price: " + str(self.unit_price) + \
-            ", fee: " + str(fee) + \
-            ", date: " + str(date)
+            ", fee: " + str(self.fee) + \
+            ", date: " + str(self.date)

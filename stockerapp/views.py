@@ -1,13 +1,15 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-
-import pandas as pd
+from django.urls import reverse
 
 from datetime import datetime, date, timedelta
 
-from .models import Stock, Portfolio
+# required models
+from .models import Stock, Order, Portfolio
+
 from .plotting import plot_candlestick
 from .iex_proxy import get_company_info, get_historical_data, get_intraday_data
+
 
 # index
 def index(request):
@@ -18,6 +20,7 @@ def index(request):
         'portfolio_list': portfolio_list,
     }
     return render(request, 'stockerapp/index.html', context)
+
 
 # stock information
 def stockinfo(request, ticker):
@@ -84,13 +87,32 @@ def stockdaily(request, ticker):
 # information about portfolio
 def portfolio(request, portfolio_id):
     portfolio = get_object_or_404(Portfolio, id=portfolio_id)
+    stocks = Stock.objects.order_by('ticker')
     context = {
         'portfolio': portfolio,
+        'stock_list': stocks,
     }
 
     return render(request, 'stockerapp/portfolio.html', context)
 
 
+# adding a new order
+def new_order(request, portfolio_id):
+    portfolio = get_object_or_404(Portfolio, id=portfolio_id)
+    stock = get_object_or_404(Stock, ticker=request.POST["ticker"])
+    datetime_str = request.POST["datetime"]
+    try:
+        date = datetime.strptime(datetime_str, '%d.%m.%Y %H:%M:%S')
+    except:
+        assert False
 
+    newOrd = Order()
+    newOrd.stock = stock
+    newOrd.portfolio = portfolio
+    newOrd.amount = request.POST["amount"]
+    newOrd.unit_price = request.POST["unit_price"]
+    newOrd.fee = request.POST["fee"]
+    newOrd.date = date
+    newOrd.save()
 
-
+    return HttpResponseRedirect(reverse('stockerapp:portfolio', args=(portfolio_id,)))

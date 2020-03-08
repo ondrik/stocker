@@ -1,12 +1,47 @@
- <!DOCTYPE html>
- <html>
-   <head>
-     <meta charset="UTF-8">
-     <title>Stocker: Portfolio</title>
-   </head>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Stocker: Portfolio</title>
+  </head>
 
-   <body>
-     <h1>Portfolio: {{ portfolio.name }}</h1>
-     empty
-   </body>
- </html> 
+  <body>
+    <h1>Portfolio: {{ portfolio.name }}</h1>
+    empty
+    <h2>New order</h2>
+    <form action="{% url 'stockerapp:new_order' portfolio.id %}" method="post">
+      {% csrf_token %}
+      <label for="ticker">Ticker:</label>
+      {% if stock_list %}
+      <select id="ticker" name="ticker">
+        {% for stock in stock_list %}
+          <option value="{{ stock.ticker }}">{{ stock.ticker }}</option>
+        {% endfor %}
+      </select> 
+      <br />
+      <label for="amount">Amount:</label>
+      <input type="text" id="amount" name="amount" value="0" />
+      <br />
+      <label for="unit_price">Unit price:</label>
+      <input type="text" id="unit_price" name="unit_price" value="0.0" />
+      <b>CURRENCY</b>
+      <br />
+      <label for="fee">Fee:</label>
+      <input type="text" id="fee" name="fee" value="0.0" />
+      <b>CURRENCY</b>
+      <br />
+      <label for="datetime">Date and time:</label>
+      <input type="text" id="datetime" name="datetime" value="" />
+      (format: dd.mm.yyyy HH:MM:SS)
+      <br />
+      {% else %}
+       <b>NO STOCKS!</b> (add stocks first)
+      {% endif %}
+      <!-- {% for choice in question.choice_set.all %} -->
+      <!--   <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" > -->
+      <!--   <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br> -->
+      <!-- {% endfor %} -->
+      <input type="submit" value="Add">
+    </form>
+  </body>
+</html> 
