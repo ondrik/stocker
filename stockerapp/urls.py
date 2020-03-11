@@ -9,4 +9,5 @@ urlpatterns = [
     path('stockdaily/<str:ticker>/', views.stockdaily, name='stockdaily'),
     path('portfolio/<int:portfolio_id>/', views.portfolio, name='portfolio'),
     path('new_order/<int:portfolio_id>/', views.new_order, name='new_order'),
+    path('new_ticker/', views.new_ticker, name='new_ticker'),
 ]

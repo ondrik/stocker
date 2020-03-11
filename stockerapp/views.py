@@ -5,10 +5,10 @@ from django.urls import reverse
 from datetime import datetime, date, timedelta
 
 # required models
-from .models import Stock, Order, Portfolio
+from .models import *
 
-from .plotting import plot_candlestick
-from .iex_proxy import get_company_info, get_historical_data, get_intraday_data
+from .plotting import *
+from .iex_proxy import *
 
 
 # index
@@ -88,7 +88,8 @@ def stockdaily(request, ticker):
 def portfolio(request, portfolio_id):
     portfolio = get_object_or_404(Portfolio, id=portfolio_id)
     stocks = Stock.objects.order_by('ticker')
-    orders = portfolio.order_set.all()
+    # TODO: sort the orders
+    orders = portfolio.order_set.order_by('-date')
     context = {
         'portfolio': portfolio,
         'stock_list': stocks,
@@ -118,3 +119,19 @@ def new_order(request, portfolio_id):
     newOrd.save()
 
     return HttpResponseRedirect(reverse('stockerapp:portfolio', args=(portfolio_id,)))
+
+
+# adding a new ticker
+def new_ticker(request):
+    new_ticker = request.POST["ticker"]
+
+    # check the stock is not already there
+    if Stock.objects.filter(ticker=new_ticker).exists():
+        assert False
+    else:
+        stock = Stock()
+        stock.ticker = new_ticker
+        stock.refresh_info()
+        stock.save()
+
+    return HttpResponseRedirect(reverse('stockerapp:index', args=()))

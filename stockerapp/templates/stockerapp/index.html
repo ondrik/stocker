@@ -28,6 +28,14 @@
     {% else %}
         <p>No stocks are available.</p>
     {% endif %}
+
+    <h2>Add a new company</h2>
+    <form action="{% url 'stockerapp:new_ticker' %}" method="post">
+      {% csrf_token %}
+      <label for="ticker">Ticker:</label>
+      <input type="text" id="ticker" name="ticker" value="" />
+      <input type="submit" value="Add">
+    </form>
     <h2>Portfolios</h2>
     {% if portfolio_list %}
       <table>
