@@ -8,7 +8,7 @@
   <body>
     <h1>Portfolio: {{ portfolio.name }}</h1>
     empty
-    <h2>New order</h2>
+    <h1>New order</h1>
     <form action="{% url 'stockerapp:new_order' portfolio.id %}" method="post">
       {% csrf_token %}
       <label for="ticker">Ticker:</label>
@@ -35,7 +35,7 @@
       (format: dd.mm.yyyy HH:MM:SS)
       <br />
       {% else %}
-       <b>NO STOCKS!</b> (add stocks first)
+       <b>NO COMPANIES!</b> (add companies first)
       {% endif %}
       <!-- {% for choice in question.choice_set.all %} -->
       <!--   <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" > -->
@@ -43,5 +43,21 @@
       <!-- {% endfor %} -->
       <input type="submit" value="Add">
     </form>
+    <h1>Order history</h1>
+    {% if order_list %}
+      <table>
+        <tr>
+          <th>
+          </th>
+        </tr>
+        {% for order in order_list %}
+          <tr>
+            <td>{{ order }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+    <p>No orders</p>
+    {% endif %}
   </body>
 </html> 

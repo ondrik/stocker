@@ -88,9 +88,11 @@ def stockdaily(request, ticker):
 def portfolio(request, portfolio_id):
     portfolio = get_object_or_404(Portfolio, id=portfolio_id)
     stocks = Stock.objects.order_by('ticker')
+    orders = portfolio.order_set.all()
     context = {
         'portfolio': portfolio,
         'stock_list': stocks,
+        'order_list': orders
     }
 
     return render(request, 'stockerapp/portfolio.html', context)
