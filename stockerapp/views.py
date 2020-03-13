@@ -27,11 +27,7 @@ def stockinfo(request, ticker):
 
     stock = get_object_or_404(Stock, ticker=ticker)
 
-    # iex_stock = iexstocks.Stock(stock.ticker, output_format='pandas', token=IEX_TOKEN)
-    # iex_stock = iexstocks.Stock(stock.ticker, output_format='json', token=IEX_TOKEN)
     company = get_company_info(stock.ticker)
-    # logo_url = iex_stock.get_logo()['url']
-    # company = iex_stock.get_company()
 
     end = date.today()
     start = end - timedelta(days=60)
@@ -59,10 +55,7 @@ def stockinfo(request, ticker):
 def stockdaily(request, ticker):
     stock = get_object_or_404(Stock, ticker=ticker)
 
-    # iex_stock = iexstocks.Stock(stock.ticker, output_format='json', token=IEX_TOKEN)
     company = get_company_info(stock.ticker)
-    # logo_url = iex_stock.get_logo()['url']
-    # company = iex_stock.get_company()
 
     df = get_intraday_data(stock.ticker)
     df["time"] = df.index
@@ -86,14 +79,22 @@ def stockdaily(request, ticker):
 
 # information about portfolio
 def portfolio(request, portfolio_id):
-    portfolio = get_object_or_404(Portfolio, id=portfolio_id)
+    portf = get_object_or_404(Portfolio, id=portfolio_id)
     stocks = Stock.objects.order_by('ticker')
-    # TODO: sort the orders
-    orders = portfolio.order_set.order_by('-date')
+    orders = portf.order_set.order_by('-date')
+    cur_stocks = portf.get_current_stocks()
+    stock_list = list()
+    for ticker, stock_info in cur_stocks.items():
+        stock_list.append({'ticker': ticker,
+                           'company_name': stock_info['stock'].company_name,
+                           'logo_url': stock_info['stock'].logo_url,
+                           'amount': stock_info['amount']})
+
     context = {
-        'portfolio': portfolio,
+        'portfolio': portf,
         'stock_list': stocks,
-        'order_list': orders
+        'order_list': orders,
+        'cur_stocks': stock_list
     }
 
     return render(request, 'stockerapp/portfolio.html', context)

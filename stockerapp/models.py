@@ -32,6 +32,22 @@ class Portfolio(models.Model):
     def __str__(self):
         return self.name
 
+    # get all stocks currently held
+    def get_current_stocks(self):
+        cur_stocks = dict()
+        orders = self.order_set.all()
+        for order in orders:
+            ticker = order.stock.ticker
+            # first time adding the ticker
+            if not ticker in cur_stocks:
+                cur_stocks[ticker] = {'stock': order.stock, 'amount': order.amount}
+            else:
+                cur_stocks[ticker]['amount'] += order.amount
+
+        cur_stocks = {key:value for (key,value) in cur_stocks.items() if value['amount'] != 0}
+
+        return cur_stocks
+
 
 # A class representing a buying or selling order
 class Order(models.Model):

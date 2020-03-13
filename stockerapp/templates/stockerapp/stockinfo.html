@@ -12,6 +12,8 @@
    </head>
 
    <body>
+     <p><a href="{% url 'stockerapp:index' %}">Home</a></p>
+
      <h1>{{ stock.ticker }}: {{ company_name }} &mdash; {{ cur_price }}</h1>
      <img src="{{ stock_img }}" />
 

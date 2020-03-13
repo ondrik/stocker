@@ -6,8 +6,28 @@
   </head>
 
   <body>
+    <p><a href="{% url 'stockerapp:index' %}">Home</a></p>
     <h1>Portfolio: {{ portfolio.name }}</h1>
-    empty
+    {% if cur_stocks %}
+    <table>
+      <tr>
+        <th></th>
+        <th>Ticker</th>
+        <th>Name</th>
+        <th>Amount</th>
+      </tr>
+      {% for stock_info in cur_stocks %}
+      <tr>
+        <td><img src="{{ stock_info.logo_url }}" height="32" /></td>
+        <td>{{ stock_info.ticker }}</td>
+        <td>{{ stock_info.company_name }}</td>
+        <td>{{ stock_info.amount }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    empty portfolio
+    {% endif %}
     <h1>New order</h1>
     <form action="{% url 'stockerapp:new_order' portfolio.id %}" method="post">
       {% csrf_token %}
