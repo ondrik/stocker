@@ -18,10 +18,12 @@
       </tr>
       {% for stock_info in cur_stocks %}
       <tr>
-        <td><img src="{{ stock_info.logo_url }}" height="32" /></td>
+        <td><img src="{{ stock_info.logo_url }}" width="32" /></td>
         <td>{{ stock_info.ticker }}</td>
         <td>{{ stock_info.company_name }}</td>
         <td>{{ stock_info.amount }}</td>
+        <td>{{ stock_info.cur_price }}</td>
+        <td><b>{{ stock_info.cur_price.all }}</b></td>
       </tr>
       {% endfor %}
     </table>
@@ -57,22 +59,29 @@
       {% else %}
        <b>NO COMPANIES!</b> (add companies first)
       {% endif %}
-      <!-- {% for choice in question.choice_set.all %} -->
-      <!--   <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" > -->
-      <!--   <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br> -->
-      <!-- {% endfor %} -->
       <input type="submit" value="Add">
     </form>
     <h1>Order history</h1>
     {% if order_list %}
       <table>
         <tr>
-          <th>
-          </th>
+          <th>Date and time</th>
+          <th>Logo</th>
+          <th>Ticker</th>
+          <th>Company</th>
+          <th>Amount</th>
+          <th>Unit price</th>
+          <th>Fee</th>
         </tr>
         {% for order in order_list %}
           <tr>
-            <td>{{ order }}</td>
+            <td>{{ order.date }}</td>
+            <td><img src="{{ order.stock.logo_url }}" width="32" /></td>
+            <td>{{ order.stock.ticker }}</td>
+            <td>{{ order.stock.company_name }}</td>
+            <td>{{ order.amount }}</td>
+            <td>{{ order.unit_price }}</td>
+            <td>{{ order.fee }}</td>
           </tr>
         {% endfor %}
       </table>

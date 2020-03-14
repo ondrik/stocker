@@ -1,6 +1,6 @@
 from django.db import models
 
-from .iex_proxy import get_company_info
+from .market_data import get_company_info, get_stock_price
 
 
 # A class representing a stock
@@ -22,6 +22,11 @@ class Stock(models.Model):
             self.save()
         except:
             assert False
+
+    # gets the current price of the stock
+    def get_price(self):
+        price = get_stock_price(ticker=self.ticker)
+        return price
 
 
 # A class representing a portfolio of stocks
@@ -65,3 +70,14 @@ class Order(models.Model):
             ", unit price: " + str(self.unit_price) + \
             ", fee: " + str(self.fee) + \
             ", date: " + str(self.date)
+
+
+# A class representing daily summary of trades with a stock
+class StockDailyData(models.Model):
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    date = models.DateField()
+    open_price = models.DecimalField(max_digits=20, decimal_places=6)
+    high_price = models.DecimalField(max_digits=20, decimal_places=6)
+    low_price = models.DecimalField(max_digits=20, decimal_places=6)
+    close_price = models.DecimalField(max_digits=20, decimal_places=6)
+    volume = models.IntegerField(default=0)

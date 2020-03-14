@@ -8,7 +8,7 @@ from datetime import datetime, date, timedelta
 from .models import *
 
 from .plotting import *
-from .iex_proxy import *
+from .market_data import *
 
 
 # index
@@ -85,10 +85,15 @@ def portfolio(request, portfolio_id):
     cur_stocks = portf.get_current_stocks()
     stock_list = list()
     for ticker, stock_info in cur_stocks.items():
+        stock = stock_info['stock']
+        cur_price = stock.get_price()
+        amount = stock_info['amount']
         stock_list.append({'ticker': ticker,
-                           'company_name': stock_info['stock'].company_name,
-                           'logo_url': stock_info['stock'].logo_url,
-                           'amount': stock_info['amount']})
+                           'company_name': stock.company_name,
+                           'logo_url': stock.logo_url,
+                           'amount': amount,
+                           'cur_price': cur_price,
+                           'cur_price_all': cur_price * amount})
 
     context = {
         'portfolio': portf,
